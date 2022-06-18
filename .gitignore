@@ -1,0 +1,14 @@
+.uix-dashboard.json
+.uix-hb-service-homebridge-startup.json
+.uix-secrets
+accessories/
+auth.json
+backups/
+homebridge.log
+homematic_config.json
+node_modules/
+package-lock.json
+package.json
+persist/
+pnpm-lock.yaml
+
