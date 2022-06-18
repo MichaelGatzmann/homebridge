@@ -81,6 +81,12 @@ log_entry $1 $2 "PARAM" "paramter: $b $k"
 
 # Check if another Task is running
 timeout=20
+log_entry $1 $2 "KILLALL"
+
+if /usr/bin/pgrep -x $CMD > /dev/null ; then 
+	log_entry $1 $2 "ERROR" "found old processes $CMD" 
+        sudo killall --older-than 1m "$CMD"
+fi
 log_entry $1 $2 "PGREP"
 
 while /usr/bin/pgrep -x "$CMD" > /dev/null ;
@@ -90,8 +96,8 @@ do
 		echo "ERROR: Timeout while waiting for the process $CMD"
 		log_entry $1 $2 "ERROR" "Timeout while waiting for the process $CMD" 
 		sudo killall $CMD
-		log_entry $1 $2 "ERROR" "kill all old processes of $CMD" 
-                exit 1
+		log_entry $1 $2 "ERROR" "kill processes of $CMD" 
+                # exit 1
 	fi
 
 	sleep 0.1
@@ -102,6 +108,7 @@ done
 
 log_entry $1 $2 "SEND" "-----> ----> ---->"
 sleep 0.2 
+#echo ${SEND} -q 6F -r 6E -c 4F -b $b -k $k -v CD -n $nRepeatTransmit
 sudo ${SEND} -q 6F -r 6E -c 4F -b $b -k $k -v CD -n $nRepeatTransmit
 
 log_entry $1 $2 "FLAG" "execute $flag_cmd $state"
