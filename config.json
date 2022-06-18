@@ -1,0 +1,193 @@
+{
+    "bridge": {
+        "name": "myHomebridge",
+        "username": "CC:22:3D:E3:CE:31",
+        "manufacturer": "homebridge.io",
+        "model": "homebridge",
+        "port": 51826,
+        "pin": "901-45-734"
+    },
+    "description": "Home Smart Home",
+    "platforms": [
+        {
+            "name": "Config",
+            "port": 8080,
+            "auth": "form",
+            "theme": "blue",
+            "restart": "sudo -n systemctl restart homebridge",
+            "temp": "/sys/class/thermal/thermal_zone0/temp",
+            "tempUnits": "c",
+            "lang": "auto",
+            "sudo": true,
+            "log": {
+                "method": "custom",
+                "command": "journalctl -o cat -n 500 -f -u homebridge"
+            },
+            "platform": "config"
+        },
+        {
+            "devices": [
+                {
+                    "api_key": "3e386d4c-1997-4b62-b0d4-b367100d909d",
+                    "name": "Wohnzimmer TV",
+                    "ip": "192.168.0.30",
+                    "mac": "5C:49:7D:78:07:3E",
+                    "switches": [
+                        {
+                            "name": "Mute",
+                            "power": true,
+                            "mute": true
+                        },
+                        {
+                            "name": "Vol Up",
+                            "power": true,
+                            "command": "KEY_VOLUP"
+                        },
+                        {
+                            "name": "Vol Down",
+                            "power": true,
+                            "command": "KEY_VOLDOWN"
+                        },
+                        {
+                            "name": "PRG Up",
+                            "power": true,
+                            "command": "KEY_CHUP"
+                        },
+                        {
+                            "name": "PRG Down",
+                            "power": true,
+                            "command": "KEY_CHDOWN"
+                        },
+                        {
+                            "name": "UP",
+                            "power": true,
+                            "command": "KEY_UP"
+                        },
+                        {
+                            "name": "DOWN",
+                            "power": true,
+                            "command": "KEY_DOWN"
+                        },
+                        {
+                            "name": "LEFT",
+                            "power": true,
+                            "command": "KEY_LEFT"
+                        },
+                        {
+                            "name": "RIGHT",
+                            "power": true,
+                            "command": "KEY_RIGHT"
+                        },
+                        {
+                            "name": "GUIDE",
+                            "power": true,
+                            "command": "KEY_GUIDE"
+                        },
+                        {
+                            "name": "INFO",
+                            "power": true,
+                            "command": "KEY_INFO"
+                        },
+                        {
+                            "name": "RETURN",
+                            "power": true,
+                            "command": "KEY_RETURN"
+                        },
+                        {
+                            "name": "ENTER",
+                            "power": true,
+                            "command": "KEY_ENTER"
+                        }
+                    ]
+                }
+            ],
+            "platform": "SamsungTizen"
+        }
+    ],
+    "accessories": [
+        {
+            "accessory": "TV",
+            "name": "Office TV",
+            "description": "Office TV",
+            "ip": "192.168.0.31",
+            "maxVolume": 100
+        },
+        {
+            "accessory": "DS18B20",
+            "name": "Temperature Sensor",
+            "device": "28-0316a37563ff"
+        },
+        {
+            "accessory": "Script2",
+            "name": "Couch Stehlampe",
+            "on": "/var/lib/homebridge/bin/rcswitch.sh A ON",
+            "off": "/var/lib/homebridge/bin/rcswitch.sh A OFF",
+            "fileState": "/var/lib/homebridge/flags/switch_A.flag",
+            "onvalue": true
+        },
+        {
+            "accessory": "Script2",
+            "name": "Esstisch Stehlampe",
+            "on": "/var/lib/homebridge/bin/rcswitch.sh B ON",
+            "off": "/var/lib/homebridge/bin/rcswitch.sh B OFF",
+            "fileState": "/var/lib/homebridge/flags/switch_B.flag",
+            "onvalue": true
+        },
+        {
+            "accessory": "Script2",
+            "name": "Sideboard Lampe",
+            "on": "/var/lib/homebridge/bin/rcswitch.sh C ON",
+            "off": "/var/lib/homebridge/bin/rcswitch.sh C OFF",
+            "fileState": "/var/lib/homebridge/flags/switch_C.flag",
+            "onvalue": true
+        },
+        {
+            "accessory": "Script2",
+            "name": "RCswich All",
+            "on": "/var/lib/homebridge/bin/rcswitch_all.sh ON",
+            "off": "/var/lib/homebridge/bin/rcswitch_all.sh OFF",
+            "state": "/var/lib/homebridge/bin/rcswitch_state.sh",
+            "onvalue": true
+        },
+        {
+            "accessory": "Script2",
+            "name": "Hängeschrank",
+            "on": "/var/lib/homebridge/bin/led.sh 1 ON",
+            "off": "/var/lib/homebridge/bin/led.sh 1 OFF",
+            "fileState": "/var/lib/homebridge/flags/led_1.flag",
+            "onvalue": true
+        },
+        {
+            "accessory": "Script2",
+            "name": "Regal",
+            "on": "/var/lib/homebridge/bin/led.sh 2 ON",
+            "off": "/var/lib/homebridge/bin/led.sh 2 OFF",
+            "fileState": "/var/lib/homebridge/flags/led_2.flag",
+            "on_value": "true"
+        },
+        {
+            "accessory": "Script2",
+            "name": "Christmas City",
+            "on": "/var/lib/homebridge/bin/led.sh 3 ON",
+            "off": "/var/lib/homebridge/bin/led.sh 3 OFF",
+            "fileState": "/var/lib/homebridge/flags/led_3.flag",
+            "on_value": "true"
+        },
+        {
+            "accessory": "Script2",
+            "name": "LED Control",
+            "on": "/var/lib/homebridge/bin/led.sh control ON",
+            "off": "/var/lib/homebridge/bin/led.sh control OFF",
+            "fileState": "/var/lib/homebridge/flags/led_c.flag",
+            "on_value": "true"
+        },
+        {
+            "accessory": "Script2",
+            "name": "LED All",
+            "on": "/var/lib/homebridge/bin/led_all.sh ON",
+            "off": "/var/lib/homebridge/bin/led_all.sh OFF",
+            "state": "/var/lib/homebridge/bin/led_state.sh",
+            "on_value": "true"
+        }
+    ]
+}
