@@ -85,7 +85,7 @@ log_entry $1 $2 "KILLALL"
 
 if /usr/bin/pgrep -x $CMD > /dev/null ; then 
 	log_entry $1 $2 "ERROR" "found old processes $CMD" 
-        sudo killall --older-than 1m "$CMD"
+        sudo killall --older-than 5s "$CMD"
 fi
 log_entry $1 $2 "PGREP"
 
@@ -108,11 +108,17 @@ done
 
 log_entry $1 $2 "SEND" "-----> ----> ---->"
 sleep 0.2 
-#echo ${SEND} -q 6F -r 6E -c 4F -b $b -k $k -v CD -n $nRepeatTransmit
+echo ${SEND} -q 6F -r 6E -c 4F -b $b -k $k -v CD -n $nRepeatTransmit
 sudo ${SEND} -q 6F -r 6E -c 4F -b $b -k $k -v CD -n $nRepeatTransmit
 
-log_entry $1 $2 "FLAG" "execute $flag_cmd $state"
-$flag_cmd $state
+if [ ! -f "$state" ] && [ "$flag_cmd" == "touch" ]; then
+        log_entry $1 $2 "FLAG" "execute $flag_cmd $state"
+        $flag_cmd $state
+fi
+if [ -f "$state" ] && [ "$flag_cmd" == "rm -f" ]; then
+        log_entry $1 $2 "FLAG" "execute $flag_cmd $state"
+        $flag_cmd $state
+fi
 
 if [ $1 == "CONTROL" ] || [ $1 == "control" ]; then
 	echo "control"

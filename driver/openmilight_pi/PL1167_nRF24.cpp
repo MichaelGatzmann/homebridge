@@ -9,7 +9,8 @@
 
 static uint16_t calc_crc(uint8_t *data, size_t data_length);
 static uint8_t reverse_bits(uint8_t data);
-static void demangle_packet(uint8_t *in, uint8_t *out) ;
+//static void demangle_packet(uint8_t *in, uint8_t *out) ;
+void demangle_packet(uint8_t *in, uint8_t *out) ;
 
 
 /**
@@ -53,7 +54,7 @@ int PL1167_nRF24::recalc_parameters()
     packet_length += 2;
   }
 
-  if (packet_length > sizeof(_packet) || nrf_address_length < 3) {
+  if ((unsigned)packet_length > sizeof(_packet) || nrf_address_length < 3) {
     return -1;
   }
 
@@ -200,7 +201,7 @@ int PL1167_nRF24::readFIFO(uint8_t data[], size_t &data_length)
 
 int PL1167_nRF24::writeFIFO(const uint8_t data[], size_t data_length)
 {
-  if (data_length > sizeof(_packet)) {
+  if (unsigned(data_length) > sizeof(_packet)) {
     data_length = sizeof(_packet);
   }
   memcpy(_packet, data, data_length);
@@ -279,7 +280,7 @@ int PL1167_nRF24::transmit(uint8_t channel)
     }
 
     while (buffer_fill > (last_round ? 0 : 8)) {
-      if (outp >= sizeof(tmp)) {
+      if (unsigned(outp) >= sizeof(tmp)) {
         return -1;
       }
       tmp[outp++] = reverse_bits(buffer & 0xff);
@@ -329,28 +330,28 @@ int PL1167_nRF24::internal_receive()
       int syncp = inp - _preambleLength + 1 + _nrf_pipe_length;
       switch (syncp) {
         case 0:
-          if (inbyte != _syncword0 & 0xFF) {
+          if ((inbyte != _syncword0) & 0xFF) {
 #ifdef DEBUG_PRINTF
             printf("Sync 0l fail (%i: %02X)\n", inp, inbyte);
 #endif
             return 0;
           } break;
         case 1:
-          if (inbyte != (_syncword0 >> 8) & 0xFF) {
+          if ((inbyte != (_syncword0 >> 8)) & 0xFF) {
 #ifdef DEBUG_PRINTF
             printf("Sync 0h fail (%i: %02X)\n", inp, inbyte);
 #endif
             return 0;
           } break;
         case 2:
-          if ((_syncwordLength == 4) && (inbyte != _syncword3 & 0xFF)) {
+          if ((_syncwordLength == 4) && ((inbyte != _syncword3) & 0xFF)) {
 #ifdef DEBUG_PRINTF
             printf("Sync 3l fail (%i: %02X)\n", inp, inbyte);
 #endif
             return 0;
           } break;
         case 3:
-          if ((_syncwordLength == 4) && (inbyte != (_syncword3 >> 8) & 0xFF)) {
+          if ((_syncwordLength == 4) && ((inbyte != (_syncword3 >> 8)) & 0xFF)) {
 #ifdef DEBUG_PRINTF
             printf("Sync 3h fail (%i: %02X)\n", inp, inbyte);
 #endif
